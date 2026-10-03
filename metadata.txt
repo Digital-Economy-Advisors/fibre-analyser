@@ -1,0 +1,7 @@
+[general]
+name=Fibre Analyzer
+qgisMinimumVersion=3.16
+version=1.0
+description=Financial viability calculator for fibre network deployments
+author=Clinton
+category=Analysis
