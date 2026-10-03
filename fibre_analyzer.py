@@ -108,8 +108,13 @@ class PolygonMapTool(QgsMapTool):
             self.is_drawing = True
         elif event.button() == Qt.MouseButton.RightButton and self.is_drawing:
             if len(self.points) >= 3:
-                polygon = QgsGeometry.fromPolygonXY([self.points])
+                ring = self.points[:]
+                if ring[0] != ring[-1]:
+                    ring.append(ring[0])
+                polygon = QgsGeometry.fromPolygonXY([ring])
                 self.callback(polygon)
+            else:
+                self.callback(None)
             self.reset()
            
     def reset(self):
@@ -154,6 +159,12 @@ class FibreAnalyzerDialog(QDialog):  # ← Class name changed
         self.area_unit_name = unit_name
     
     def polygon_drawn(self, polygon):
+        if polygon is None:
+            QMessageBox.warning(
+                self, "Warning", "At least three points are required to draw an area."
+            )
+            return
+
         if not polygon.isGeosValid():
             QMessageBox.warning(self, "Warning", "Invalid polygon drawn. Please try again.")
             self.reset_drawing()
