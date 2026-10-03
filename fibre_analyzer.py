@@ -170,15 +170,30 @@ class FibreAnalyzerDialog(QDialog):  # ← Class name changed
             self.reset_drawing()
             return
             
+        canvas = self.iface.mapCanvas()
+        self.distance_calc.setSourceCrs(
+            canvas.mapSettings().destinationCrs(),
+            QgsProject.instance().transformContext()
+        )
+        area_m2 = self.distance_calc.measureArea(polygon)
+        if not math.isfinite(area_m2) or area_m2 <= 0:
+            QMessageBox.warning(
+                self, "Warning",
+                "Could not measure the selected area. Check the map coordinate reference system and draw the area again."
+            )
+            self.reset_drawing()
+            return
+
         self.selected_polygon = polygon
-        self.selected_area_m2 = self.distance_calc.measureArea(polygon)
+        self.selected_area_m2 = area_m2
         self.update_area_display()
-        self.iface.mapCanvas().unsetMapTool(self.map_tool)
+        canvas.unsetMapTool(self.map_tool)
     
     def reset_drawing(self):
         if self.map_tool:
             self.map_tool.reset()
             self.iface.mapCanvas().unsetMapTool(self.map_tool)
+        self.selected_polygon = None
         self.area_status.setText("No area selected")
         self.area_status.setStyleSheet("color: gray; font-style: italic;")
         self.selected_area_m2 = 0.0
