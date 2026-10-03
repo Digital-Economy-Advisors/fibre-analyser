@@ -101,12 +101,12 @@ class PolygonMapTool(QgsMapTool):
         self.is_drawing = False
        
     def canvasPressEvent(self, event):
-        if event.button() == Qt.LeftButton:
+        if event.button() == Qt.MouseButton.LeftButton:
             point = self.toMapCoordinates(event.pos())
             self.points.append(point)
             self.rubberBand.addPoint(point, True)
             self.is_drawing = True
-        elif event.button() == Qt.RightButton and self.is_drawing:
+        elif event.button() == Qt.MouseButton.RightButton and self.is_drawing:
             if len(self.points) >= 3:
                 polygon = QgsGeometry.fromPolygonXY([self.points])
                 self.callback(polygon)
