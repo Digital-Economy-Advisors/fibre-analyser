@@ -3,7 +3,7 @@
 Fibre Analyzer
 A QGIS Plugin for calculating financial viability of fibre deployments
 Author: Clinton
-Version: 1.0
+Version: 1.1 Fixes ben Roberts
 """
 from qgis.PyQt.QtCore import Qt, QVariant
 from qgis.PyQt.QtWidgets import (QAction, QDialog, QVBoxLayout, QHBoxLayout,
